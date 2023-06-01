@@ -137,7 +137,7 @@ After looking around we found the flag in the 'Posts' section.
 
 There was a post titled :'Message to our employees'. We found the flag as the current password.
 
-#### flag{please don't bother me}
+### flag{please don't bother me}
 
 <br/>
 
