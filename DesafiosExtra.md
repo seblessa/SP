@@ -153,7 +153,7 @@ After this, we used gdb on our program and by using the `info functions` command
 
 ![image](prints/img_33.png)
 
-One of the most important functions was `old_backdoor` because after analyzing this function with the `disas command we found a system call that would open up a shell:
+One of the most important functions was `old_backdoor` because after analyzing this function with the `disas` command we found a system call that would open up a shell:
 
 ![image](prints/img_32.png)
 
@@ -219,9 +219,11 @@ After clicking `page` we get this:
 
 We tried pressing `here` but it would only get us to the previous menu.
 
-To be able to submit directly to the last page, a post request needs to be created for the url 'http://ctf-sp.dcc.fc.up.pt:5005/request/d31b90cb6ddab3d7937611f8bf6c82d040faa28b' followed by the id shown on the home page, which is based on a new button that redirects to the page we want.
 
-Now let's try this as an input in the beggining and try to find a way to get the flag.
+We went back to the beggining again and refreshed the page, and noticed the id in the URL changed.
+It changed everytime we refreshed the page.
+
+To be able to submit directly to the last page, a post request needs to be created for the url 'http://ctf-sp.dcc.fc.up.pt:5005/request/' followed by the id shown on the home page, which is based on a new button that redirects to the page we want.
 
 ```html
 <form method="POST" action="http://ctf-sp.dcc.fc.up.pt:5005/request/d31b90cb6ddab3d7937611f8bf6c82d040faa28b/approve" role="form">          
@@ -234,6 +236,8 @@ Now let's try this as an input in the beggining and try to find a way to get the
     document.querySelector('#giveflag').click();  
 </script>
 ```
+
+Now let's try this as an input in the beggining and try to find a way to get the flag.
 
 ![image](prints/img_37.png)
 
@@ -256,8 +260,6 @@ The same menu as before, but now when we click the `here` button we are fowarded
 ![image](prints/img_41.png)
 
 ### flag{896d46a172d0bc8bd9a4f27259fbfac8}
-
-
 
 # Echo
 
@@ -452,3 +454,4 @@ Then we ran it again, and it gave us the flag:
 ![image](prints/img_25.png)
 
 ### flag{2375121b7a338043b00f6d6293896147}
+
