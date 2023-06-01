@@ -139,6 +139,8 @@ There was a post titled :'Message to our employees'. We found the flag as the cu
 
 #### flag{please don't bother me}
 
+<br/>
+
 # Final Format
 
 First we tested the provided command:
@@ -203,6 +205,8 @@ Then we built this script:
 
 ### flag{89784e5a7297422f288403d3d4c02b64}
 
+<br/>
+
 # Apply for Flag II
 
 When we open the link we are greeted with this page:
@@ -260,6 +264,8 @@ The same menu as before, but now when we click the `here` button we are fowarded
 ![image](prints/img_41.png)
 
 ### flag{896d46a172d0bc8bd9a4f27259fbfac8}
+
+<br/>
 
 # Echo
 
@@ -327,6 +333,8 @@ We ran it and got the flag:
 ![image](prints/img_28.png)
 
 ### flag{fbd17d5002b71e3fa94f7d1973087ecd}
+
+<br/>
 
 # NumberStation3
 
