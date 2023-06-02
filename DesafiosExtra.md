@@ -402,7 +402,7 @@ We modified the code to instead of try to read from a 'FLAG_FILE' to read our fl
     import os
     import sys
     
-    from cryptography.hazmat.backends import default_backend      **# We need to import this to use the default backend**
+    from cryptography.hazmat.backends import default_backend                            # We need to import this to use the default backend
     from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
     from binascii import hexlify, unhexlify
     
@@ -415,7 +415,7 @@ We modified the code to instead of try to read from a 'FLAG_FILE' to read our fl
     
     # Bitwise XOR operation.
     def enc(k, m):
-        cipher = Cipher(algorithms.AES(k), modes.ECB(), backend=default_backend())      **# We need to specify the backend**
+        cipher = Cipher(algorithms.AES(k), modes.ECB(), backend=default_backend())      # We need to specify the backend
         encryptor = cipher.encryptor()
         cph = b""
         for ch in m:
@@ -427,7 +427,7 @@ We modified the code to instead of try to read from a 'FLAG_FILE' to read our fl
     # Reverse operation
     def dec(k, c):
         assert len(c) % 16 == 0
-        cipher = Cipher(algorithms.AES(k), modes.ECB(), backend=default_backend())      **# We need to specify the backend**
+        cipher = Cipher(algorithms.AES(k), modes.ECB(), backend=default_backend())      # We need to specify the backend
         decryptor = cipher.decryptor()
         blocks = len(c) // 16
         msg = b""
