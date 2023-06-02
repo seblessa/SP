@@ -363,8 +363,8 @@ We got this code from the provided 'challenge.py' file. And started analyzing it
         encryptor = cipher.encryptor()
         cph = b""
         for ch in m:
-        cph += encryptor.update((ch*16).encode())
-        cph += encryptor.finalize()
+              cph += encryptor.update((ch*16).encode())
+              cph += encryptor.finalize()
         return cph
     
     # Reverse operation
@@ -375,9 +375,9 @@ We got this code from the provided 'challenge.py' file. And started analyzing it
         blocks = len(c)//16
         msg = b""
         for i in range(0,(blocks)):
-        msg+=decryptor.update(c[i*16:(i+1)*16])
-        msg=msg[:-15]
-        msg += decryptor.finalize()
+              msg+=decryptor.update(c[i*16:(i+1)*16])
+              msg=msg[:-15]
+              msg += decryptor.finalize()
         return msg
     
     with open(FLAG_FILE, 'r') as fd:
@@ -419,8 +419,8 @@ We modified the code to instead of try to read from a 'FLAG_FILE' to read our fl
         encryptor = cipher.encryptor()
         cph = b""
         for ch in m:
-        cph += encryptor.update((ch * 16).encode())
-        cph += encryptor.finalize()
+              cph += encryptor.update((ch * 16).encode())
+              cph += encryptor.finalize()
         return cph
     
     
@@ -432,9 +432,9 @@ We modified the code to instead of try to read from a 'FLAG_FILE' to read our fl
         blocks = len(c) // 16
         msg = b""
         for i in range(0, (blocks)):
-        msg += decryptor.update(c[i * 16:(i + 1) * 16])
-        msg = msg[:-15]
-        msg += decryptor.finalize()
+              msg += decryptor.update(c[i * 16:(i + 1) * 16])
+              msg = msg[:-15]
+              msg += decryptor.finalize()
         return msg
     
     # We change the FLAG_FILE to the local flag and created the for cicle to try everything.
