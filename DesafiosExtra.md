@@ -338,16 +338,20 @@ We ran it and got the flag:
 
 # NumberStation3
 
-We got this code from the provided 'challenge.py' file. And started analyzing it.
+We tried to open the service through the provided command:
 
-<details><summary>challenge.py</summary>
+![image](prints/img_24.png)
+
+After inspecting the provided code, we modified it to do what we only needed to do: catch the flag.
+
+<details><summary>updated challenge.py</summary>
 <p>
 
     # Python Module ciphersuite
     import os
-    import sys
+    from cryptography.hazmat.backends import default_backend
     from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-    from binascii import hexlify, unhexlify
+    from binascii import unhexlify
     
     FLAG_FILE = '/flags/flag.txt'
     
@@ -357,107 +361,33 @@ We got this code from the provided 'challenge.py' file. And started analyzing it
         for i in range(16): rkey[i] = rkey[i] & 1
         return bytes(rkey)
     
-    # Bitwise XOR operation.
-    def enc(k, m):
-        cipher = Cipher(algorithms.AES(k), modes.ECB())
-        encryptor = cipher.encryptor()
-        cph = b""
-        for ch in m:
-              cph += encryptor.update((ch*16).encode())
-              cph += encryptor.finalize()
-        return cph
     
     # Reverse operation
     def dec(k, c):
         assert len(c) % 16 == 0
-        cipher = Cipher(algorithms.AES(k), modes.ECB())
-        decryptor = cipher.decryptor()
-        blocks = len(c)//16
-        msg = b""
-        for i in range(0,(blocks)):
-              msg+=decryptor.update(c[i*16:(i+1)*16])
-              msg=msg[:-15]
-              msg += decryptor.finalize()
-        return msg
-    
-    with open(FLAG_FILE, 'r') as fd:
-    un_flag = fd.read()
-    
-    k = gen()
-    print(hexlify(enc(k, un_flag)).decode())
-    sys.stdout.flush()
-</p>
-</details>
-
-After that we tried to open the service through the provided command:
-
-![image](prints/img_24.png)
-
-We modified the code to instead of try to read from a 'FLAG_FILE' to read our flag and after searching for it, printing the flag.
-
-<details><summary>updated challenge.py</summary>
-<p>
-
-    # Python Module ciphersuite
-    import os
-    import sys
-    
-    from cryptography.hazmat.backends import default_backend                            # We need to import this to use the default backend
-    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-    from binascii import hexlify, unhexlify
-    
-    # Use crypto random generation to get a key with length n
-    def gen():
-        rkey = bytearray(os.urandom(16))
-        for i in range(16): rkey[i] = rkey[i] & 1
-        return bytes(rkey)
-    
-    
-    # Bitwise XOR operation.
-    def enc(k, m):
-        cipher = Cipher(algorithms.AES(k), modes.ECB(), backend=default_backend())      # We need to specify the backend
-        encryptor = cipher.encryptor()
-        cph = b""
-        for ch in m:
-              cph += encryptor.update((ch * 16).encode())
-              cph += encryptor.finalize()
-        return cph
-    
-    
-    # Reverse operation
-    def dec(k, c):
-        assert len(c) % 16 == 0
-        cipher = Cipher(algorithms.AES(k), modes.ECB(), backend=default_backend())      # We need to specify the backend
+        cipher = Cipher(algorithms.AES(k), modes.ECB(), default_backend())
         decryptor = cipher.decryptor()
         blocks = len(c) // 16
         msg = b""
-        for i in range(0, (blocks)):
-              msg += decryptor.update(c[i * 16:(i + 1) * 16])
-              msg = msg[:-15]
-              msg += decryptor.finalize()
+        for i in range(0, blocks):
+            msg += decryptor.update(c[i * 16:(i + 1) * 16])
+            msg = msg[:-15]
+        msg += decryptor.finalize()
         return msg
     
-    # We change the FLAG_FILE to the local flag and created the for cicle to try everything.
     
-    un_flag = "237fd4d93c910b44753a9b046a76dd0184cd3d2e8b51eb441c29549ace7f20adbef462370e66f23d3de143a82d8f5d08c4e972dcdc6817282ab0a8321096f79664f6e76d8cde99036ca6086e98a3b9731774c920767ed6ce361f5509bb0b7ebb3c554ef55b1dc5e186e136e781e4d75957e154a52e38f098f7fdeb9153d7552a83dc49a7ce38b388c97e41b7725eda6f802557224fd878a0c394b73e368aad9d1774c920767ed6ce361f5509bb0b7ebb802557224fd878a0c394b73e368aad9dad9d5bc2b132d1ea486f30f21993cdc557e154a52e38f098f7fdeb9153d7552abef462370e66f23d3de143a82d8f5d083c554ef55b1dc5e186e136e781e4d7593c554ef55b1dc5e186e136e781e4d759a572c0cc7d2ac7b78a998e038a02e62ed82f0c64b96e89e99b2c3ce562e879f60c225bf3872d314951b4cc3379e76a553c554ef55b1dc5e186e136e781e4d759ad9d5bc2b132d1ea486f30f21993cdc5d82f0c64b96e89e99b2c3ce562e879f6d82f0c64b96e89e99b2c3ce562e879f6237fd4d93c910b44753a9b046a76dd01545b7945701785fd917b0a17e6cd28fdc5f19fd511cbd8ad305e2b60dd25fe75545b7945701785fd917b0a17e6cd28fd1774c920767ed6ce361f5509bb0b7ebbec2acac9cd0206c708e334dab0c882d63c554ef55b1dc5e186e136e781e4d759a572c0cc7d2ac7b78a998e038a02e62eec2acac9cd0206c708e334dab0c882d6545b7945701785fd917b0a17e6cd28fd802557224fd878a0c394b73e368aad9d0c225bf3872d314951b4cc3379e76a5557e154a52e38f098f7fdeb9153d7552a6e35640c1c6f7f07ac32b6b1a6f2677f208f81b1fbe41d99f71f23c338b9de84"
+    c_shell = b"237fd4d93c910b44753a9b046a76dd0184cd3d2e8b51eb441c29549ace7f20adbef462370e66f23d3de143a82d8f5d08c4e972dcdc6817282ab0a8321096f79664f6e76d8cde99036ca6086e98a3b9731774c920767ed6ce361f5509bb0b7ebb3c554ef55b1dc5e186e136e781e4d75957e154a52e38f098f7fdeb9153d7552a83dc49a7ce38b388c97e41b7725eda6f802557224fd878a0c394b73e368aad9d1774c920767ed6ce361f5509bb0b7ebb802557224fd878a0c394b73e368aad9dad9d5bc2b132d1ea486f30f21993cdc557e154a52e38f098f7fdeb9153d7552abef462370e66f23d3de143a82d8f5d083c554ef55b1dc5e186e136e781e4d7593c554ef55b1dc5e186e136e781e4d759a572c0cc7d2ac7b78a998e038a02e62ed82f0c64b96e89e99b2c3ce562e879f60c225bf3872d314951b4cc3379e76a553c554ef55b1dc5e186e136e781e4d759ad9d5bc2b132d1ea486f30f21993cdc5d82f0c64b96e89e99b2c3ce562e879f6d82f0c64b96e89e99b2c3ce562e879f6237fd4d93c910b44753a9b046a76dd01545b7945701785fd917b0a17e6cd28fdc5f19fd511cbd8ad305e2b60dd25fe75545b7945701785fd917b0a17e6cd28fd1774c920767ed6ce361f5509bb0b7ebbec2acac9cd0206c708e334dab0c882d63c554ef55b1dc5e186e136e781e4d759a572c0cc7d2ac7b78a998e038a02e62eec2acac9cd0206c708e334dab0c882d6545b7945701785fd917b0a17e6cd28fd802557224fd878a0c394b73e368aad9d0c225bf3872d314951b4cc3379e76a5557e154a52e38f098f7fdeb9153d7552a6e35640c1c6f7f07ac32b6b1a6f2677f208f81b1fbe41d99f71f23c338b9de84"
     
-    un_flag = unhexlify(un_flag)
-    
-    for i in range(2**16):
-        k = gen()
-        result = dec(k, un_flag)
-        result = result.decode('latin-1')
-        first_chars = result[:5]
-        if first_chars == 'flag{':
-        print(result)
-        sys.stdout.flush()
-        break
-
-
+    for i in range(2 ** 16):
+        # print(i)
+        k2 = gen()
+        if dec(k2, unhexlify(c_shell)).decode('latin-1')[0:4] == "flag":
+            print(dec(k2,unhexlify(c_shell)).decode('latin-1'))
+            break
 </p>
 </details>
 
-Then we ran it again, and it gave us the flag:
+Then we ran it, and it gave us the flag:
 
 ![image](prints/img_25.png)
 
